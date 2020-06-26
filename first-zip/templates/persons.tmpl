@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 <style>
 img.infinite_rotating_logo{
-    animation: rotate_image 1.5s linear infinite;
+    animation: rotate_image 2s linear infinite;
     transform-origin: 50% 50%;
 }
  
@@ -34,13 +34,18 @@ img.infinite_rotating_logo{
     <hr />
     
     <br />
+      * 닉네임 알파벳순 정렬하였습니다.
+
+    <br />
+    <br />
+    <br />
+
     <br />
     <form action="/deltest" method="POST"> 
       {{ range .result }}
-          <img src={{ .ImgUrl }} width="100px" class="infinite_rotating_logo" />
+          <img src={{ .ImgUrl }} width="120px" class="infinite_rotating_logo" /> 
           <input type="radio" name="member" value="{{ .Id }}"  /> {{ .Name }}
       {{ end }}
-      <br/>
       <br/>
       <br/>
       <br/>
