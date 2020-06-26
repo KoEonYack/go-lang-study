@@ -30,18 +30,18 @@ img.infinite_rotating_logo{
   <br />
   
   <div class="col-lg-9">
-    <h1>  {{ .count }} 명 중에서 {{ .message }}</h1>
+    <h1>  {{ .count }} 명의 용의자 중에서 {{ .message }}</h1>
     <hr />
     
     <br />
-      * 닉네임 알파벳순 정렬하였습니다.
+      * 순서는 닉네임을 알파벳순 정렬하였습니다.
 
     <br />
     <br />
     <br />
 
     <br />
-    <form action="/deltest" method="POST"> 
+    <form action="/next" method="POST"> 
       {{ range .result }}
           <img src={{ .ImgUrl }} width="120px" class="infinite_rotating_logo" /> 
           <input type="radio" name="member" value="{{ .Id }}"  /> {{ .Name }}

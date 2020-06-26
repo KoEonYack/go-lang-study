@@ -101,10 +101,68 @@ func (p Person) del() (rows int, err error) {
 	return
 }
 
+func restData() {
+	delete, err := db.Query("TRUNCATE person")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer delete.Close()
+
+	i1, err := db.Query("INSERT INTO person(name, img_url) VALUES ('Carl', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2F52f8E%2FbtqE9vgymwO%2FUrXBJGcVfUajthMssv9An1%2Fimg.png')")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer i1.Close()
+
+	i2, err := db.Query("INSERT INTO person(name, img_url) VALUES ('Cindy', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FbYuUjq%2FbtqE8wNYd51%2FIEP4auHXWa67rRuZp82tR0%2Fimg.png')")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer i2.Close()
+
+	i3, err := db.Query("INSERT INTO person(name, img_url) VALUES ('Ehan', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FQf0yC%2FbtqE8xF9f4U%2FFFjHZPrgXnKkRJDHp5n5h0%2Fimg.png')")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer i3.Close()
+
+	i4, err := db.Query("INSERT INTO person(name, img_url) VALUES ('Nathan', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FdoeXPC%2FbtqFa7k0OH4%2F2ozvAmrURBmIUI5LitrRLk%2Fimg.png')")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer i4.Close()
+
+	i5, err := db.Query("INSERT INTO person(name, img_url) VALUES ('Noah', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fbmbl2t%2FbtqE81NIKdc%2FMOisXuCIpE92mH9PPlNu91%2Fimg.png')")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer i5.Close()
+
+	i6, err := db.Query("INSERT INTO person(name, img_url) VALUES ('Raccoon', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FtZYyL%2FbtqE8ySBGN9%2FNcoIak0zDpASkgubrXKApK%2Fimg.png')")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer i6.Close()
+
+	i7, err := db.Query("INSERT INTO person(name, img_url) VALUES ('Woody', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FbvIPsK%2FbtqE82Tt3Qy%2FKjOWKquFpJ7pZdwFC54VF1%2Fimg.png')")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer i7.Close()
+
+	i8, err := db.Query("INSERT INTO person(name, img_url) VALUES ('Yozi', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fbmg6qu%2FbtqE8wNYd7m%2F2gRGi5JeLTohKXBr6tChqk%2Fimg.png')")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer i8.Close()
+
+	return
+}
+
 func main() {
 
 	/* 난수 생성 */
-	var answer = rand.Intn(10)
+	var answer = rand.Intn(8)
 
 	var err error
 	db, err = sql.Open("mysql", "root:1234@tcp(127.0.0.1:3306)/olim_db?parseTime=true")
@@ -124,6 +182,7 @@ func main() {
 
 	/* Test - Template */
 	router.GET("/", func(c *gin.Context) {
+		restData()
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{
 			"title": "Root Page",
 		})
@@ -171,23 +230,42 @@ func main() {
 	})
 
 	/* 한명 제거 */
-	router.POST("/deltest", func(c *gin.Context) {
+	router.POST("/next", func(c *gin.Context) {
 
-		p := Person{}
-		persons, err := p.getAll()
+		SelectedId := c.PostForm("member")
+		fmt.Println(SelectedId)
+
+		intID, err := strconv.ParseInt(SelectedId, 10, 10)
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-		fmt.Println(answer)
+		// p := Person{Id: int(SelectedId)}
+		// rows, err := p.del()
+		// if err != nil {
+		// 	log.Fatalln(err)
+		// }
+		// fmt.Println("delete rows ", rows)
 
-		res := c.PostForm("member")
-		fmt.Println(res)
+		ap := Person{}
+		persons, err := ap.getAll()
+		if err != nil {
+			log.Fatalln(err)
+		}
 
-		c.HTML(http.StatusOK, "persons.tmpl", gin.H{
+		fmt.Println("=========================")
+		fmt.Println(answer, SelectedId)
+		fmt.Println("=========================")
+
+		res := "persons.tmpl"
+		if answer == int(intID) {
+			res = "success.tmpl"
+			fmt.Println("Debug", answer, SelectedId)
+		}
+		c.HTML(http.StatusOK, res, gin.H{
 			"result":  persons,
 			"count":   len(persons),
-			"message": fmt.Sprintf("%s를 선택했습니다.", res),
+			"message": fmt.Sprintf("선택한 사람은 범인이 아닙니다."),
 		})
 
 	})
